@@ -27,6 +27,7 @@ class ApplicationTest {
                 new ParameterizedTypeReference<List<Book>>() {
                 }).getBody();
 
-        assertThat(books).isNotNull();
+        assertThat(books).isNotEmpty();
+        assertThat(books).hasSize(5);
     }
 }
