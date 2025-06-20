@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -101,7 +102,7 @@ class ApplicationTest {
 
         // then
         assertThat(createResponse.getStatusCode()).isEqualTo(CREATED);
-        assertThat(createResponse.getHeaders().getLocation()).isNotNull();
+        assertBookAvailableUnderLocation(createResponse.getHeaders().getLocation());
         Book createdBook = createResponse.getBody();
         assertThat(createdBook).isNotNull();
         assertThat(createdBook.getId()).isNotNull();
@@ -128,6 +129,14 @@ class ApplicationTest {
         // then
         assertThat(deleteResponse.getStatusCode()).isEqualTo(NO_CONTENT);
         assertBookNoLongerAvailable(bookToDelete);
+    }
+
+    private void assertBookAvailableUnderLocation(URI bookLocation) {
+        ResponseEntity<Book> getResponse = restTemplate.getForEntity(
+                bookLocation,
+                Book.class
+        );
+        assertThat(getResponse.getStatusCode()).isEqualTo(OK);
     }
 
     private void assertBookNoLongerAvailable(Book bookToDelete) {
