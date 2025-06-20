@@ -8,34 +8,132 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.dominikcebula.samples.mongodb.MongoDBDataInitializer.BOOKS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.http.HttpStatus.*;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @Testcontainers
 @Import({MongoDBConfiguration.class, MongoDBDataInitializer.class})
 class ApplicationTest {
-
-    private static final String HELLO_ENDPOINT = "/api/v1/books";
+    private static final String BOOKS_ENDPOINT = "/api/v1/books";
 
     @Autowired
     private TestRestTemplate restTemplate;
 
     @Test
-    void shouldRetrieveBooks() {
+    void shouldRetrieveAllBooks() {
         // when
-        List<Book> books = restTemplate.exchange(HELLO_ENDPOINT, HttpMethod.GET, null,
+        ResponseEntity<List<Book>> response = restTemplate.exchange(
+                BOOKS_ENDPOINT,
+                HttpMethod.GET,
+                null,
                 new ParameterizedTypeReference<List<Book>>() {
-                }).getBody();
+                }
+        );
 
         // then
+        assertThat(response.getStatusCode()).isEqualTo(OK);
+        List<Book> books = response.getBody();
         assertThat(books)
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
-                .isEqualTo(BOOKS);
+                .containsAll(BOOKS);
+    }
+
+    @Test
+    void shouldRetrieveExistingBookById() {
+        // given
+        Book bookToRetrieve = BOOKS.get(2);
+
+        // when
+        ResponseEntity<Book> response = restTemplate.getForEntity(
+                BOOKS_ENDPOINT + "/" + bookToRetrieve.getId(),
+                Book.class
+        );
+
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(OK);
+        Book retrievedBook = response.getBody();
+        assertThat(retrievedBook)
+                .usingRecursiveComparison()
+                .ignoringFields("id")
+                .isEqualTo(bookToRetrieve);
+    }
+
+    @Test
+    void shouldNotRetrieveNonExistentBook() {
+        // when
+        ResponseEntity<Book> response = restTemplate.getForEntity(
+                BOOKS_ENDPOINT + "/000000000000000000000000",
+                Book.class
+        );
+
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(NOT_FOUND);
+    }
+
+    @Test
+    @DirtiesContext
+    void shouldCreateNewBook() {
+        // given
+        Book bookToCreated = new Book(
+                "Test Book - Create",
+                "Test Author",
+                2023,
+                Arrays.asList("Test", "Create"),
+                100
+        );
+
+        // when
+        ResponseEntity<Book> createResponse = restTemplate.postForEntity(
+                BOOKS_ENDPOINT,
+                bookToCreated,
+                Book.class
+        );
+
+        // then
+        assertThat(createResponse.getStatusCode()).isEqualTo(CREATED);
+        Book createdBook = createResponse.getBody();
+        assertThat(createdBook).isNotNull();
+        assertThat(createdBook.getId()).isNotNull();
+        assertThat(createdBook)
+                .usingRecursiveComparison()
+                .ignoringFields("id")
+                .isEqualTo(bookToCreated);
+    }
+
+    @Test
+    @DirtiesContext
+    void shouldDeleteExistingBook() {
+        // given
+        Book bookToDelete = BOOKS.get(1);
+
+        // when
+        ResponseEntity<Void> deleteResponse = restTemplate.exchange(
+                BOOKS_ENDPOINT + "/" + bookToDelete.getId(),
+                HttpMethod.DELETE,
+                null,
+                Void.class
+        );
+
+        // then
+        assertThat(deleteResponse.getStatusCode()).isEqualTo(NO_CONTENT);
+        assertBookNoLongerAvailable(bookToDelete);
+    }
+
+    private void assertBookNoLongerAvailable(Book bookToDelete) {
+        ResponseEntity<Book> getResponse = restTemplate.getForEntity(
+                BOOKS_ENDPOINT + "/" + bookToDelete.getId(),
+                Book.class
+        );
+        assertThat(getResponse.getStatusCode()).isEqualTo(NOT_FOUND);
     }
 }
