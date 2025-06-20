@@ -1,6 +1,7 @@
 package com.dominikcebula.samples.mongodb;
 
 import com.dominikcebula.samples.mongodb.books.Book;
+import com.dominikcebula.samples.mongodb.books.BookCreateOrUpdateRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -85,7 +86,7 @@ class ApplicationTest {
     @DirtiesContext
     void shouldCreateNewBook() {
         // given
-        Book bookToCreated = new Book(
+        BookCreateOrUpdateRequest bookToCreate = new BookCreateOrUpdateRequest(
                 "The Lord of the Rings",
                 "J.R.R. Tolkien",
                 1954,
@@ -96,7 +97,7 @@ class ApplicationTest {
         // when
         ResponseEntity<Book> createResponse = restTemplate.postForEntity(
                 BOOKS_ENDPOINT,
-                bookToCreated,
+                bookToCreate,
                 Book.class
         );
 
@@ -109,7 +110,13 @@ class ApplicationTest {
         assertThat(createdBook)
                 .usingRecursiveComparison()
                 .ignoringFields("id")
-                .isEqualTo(bookToCreated);
+                .isEqualTo(new Book(
+                        bookToCreate.getTitle(),
+                        bookToCreate.getAuthor(),
+                        bookToCreate.getPublishedYear(),
+                        bookToCreate.getGenres(),
+                        bookToCreate.getPages()
+                ));
     }
 
     @Test

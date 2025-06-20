@@ -37,8 +37,15 @@ public class BooksController {
     }
 
     @PostMapping
-    public ResponseEntity<Book> createBook(@RequestBody Book book) {
-        book.setId(null);
+    public ResponseEntity<Book> createBook(@RequestBody BookCreateOrUpdateRequest request) {
+        Book book = new Book(
+                request.getTitle(),
+                request.getAuthor(),
+                request.getPublishedYear(),
+                request.getGenres(),
+                request.getPages()
+        );
+
         Book savedBook = bookRepository.save(book);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -47,13 +54,21 @@ public class BooksController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable("id") String id, @RequestBody Book book) {
+    public ResponseEntity<Book> updateBook(@PathVariable("id") String id, @RequestBody BookCreateOrUpdateRequest request) {
         ObjectId objectId = new ObjectId(id);
 
         if (!bookRepository.existsById(objectId))
             return ResponseEntity.notFound().build();
 
-        book.setId(objectId);
+        Book book = new Book(
+                objectId,
+                request.getTitle(),
+                request.getAuthor(),
+                request.getPublishedYear(),
+                request.getGenres(),
+                request.getPages()
+        );
+
         Book updatedBook = bookRepository.save(book);
 
         return ResponseEntity.ok(updatedBook);
