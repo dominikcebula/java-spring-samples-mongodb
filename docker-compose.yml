@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mongodb:
     image: mongo:8
@@ -7,7 +5,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - mongodb_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
     environment:
       - MONGO_INITDB_DATABASE=books
     healthcheck:
@@ -16,7 +14,3 @@ services:
       timeout: 10s
       retries: 5
       start_period: 10s
-
-volumes:
-  mongodb_data:
-    driver: local
