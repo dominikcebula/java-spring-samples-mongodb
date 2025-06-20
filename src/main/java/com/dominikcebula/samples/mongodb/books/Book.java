@@ -1,4 +1,4 @@
-package com.dominikcebula.samples.mongodb.entity;
+package com.dominikcebula.samples.mongodb.books;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

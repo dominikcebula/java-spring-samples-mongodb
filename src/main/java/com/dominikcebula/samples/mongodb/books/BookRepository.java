@@ -1,6 +1,5 @@
-package com.dominikcebula.samples.mongodb.repository;
+package com.dominikcebula.samples.mongodb.books;
 
-import com.dominikcebula.samples.mongodb.entity.Book;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 

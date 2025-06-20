@@ -1,7 +1,5 @@
-package com.dominikcebula.samples.mongodb.web;
+package com.dominikcebula.samples.mongodb.books;
 
-import com.dominikcebula.samples.mongodb.entity.Book;
-import com.dominikcebula.samples.mongodb.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;

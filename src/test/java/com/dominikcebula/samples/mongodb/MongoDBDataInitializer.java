@@ -1,7 +1,7 @@
 package com.dominikcebula.samples.mongodb;
 
-import com.dominikcebula.samples.mongodb.entity.Book;
-import com.dominikcebula.samples.mongodb.repository.BookRepository;
+import com.dominikcebula.samples.mongodb.books.Book;
+import com.dominikcebula.samples.mongodb.books.BookRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;

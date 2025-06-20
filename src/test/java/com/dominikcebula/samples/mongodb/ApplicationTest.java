@@ -1,6 +1,6 @@
 package com.dominikcebula.samples.mongodb;
 
-import com.dominikcebula.samples.mongodb.entity.Book;
+import com.dominikcebula.samples.mongodb.books.Book;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
