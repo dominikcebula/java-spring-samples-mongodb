@@ -41,6 +41,141 @@ The application provides the following API endpoints:
 - `PUT /api/v1/books/{id}` - Update an existing book
 - `DELETE /api/v1/books/{id}` - Delete a book
 
+## API Examples
+
+Below are curl examples for all API operations:
+
+### Retrieve All Books
+
+```bash
+curl -X GET http://localhost:8080/api/v1/books
+```
+
+Example response:
+
+```json
+[
+  {
+    "id": "65a123b789cdef0123456789",
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "publishedYear": 1960,
+    "genres": [
+      "Fiction",
+      "Classic",
+      "Coming-of-age"
+    ],
+    "pages": 281
+  },
+  {
+    "id": "65a123b789cdef0123456790",
+    "title": "1984",
+    "author": "George Orwell",
+    "publishedYear": 1949,
+    "genres": [
+      "Dystopian",
+      "Science Fiction",
+      "Political Fiction"
+    ],
+    "pages": 328
+  }
+]
+```
+
+### Retrieve a Specific Book
+
+```bash
+curl -X GET http://localhost:8080/api/v1/books/65a123b789cdef0123456789
+```
+
+Example response:
+
+```json
+{
+  "id": "65a123b789cdef0123456789",
+  "title": "To Kill a Mockingbird",
+  "author": "Harper Lee",
+  "publishedYear": 1960,
+  "genres": [
+    "Fiction",
+    "Classic",
+    "Coming-of-age"
+  ],
+  "pages": 281
+}
+```
+
+### Create a New Book
+
+```bash
+curl -X POST http://localhost:8080/api/v1/books \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "publishedYear": 1925,
+    "genres": ["Fiction", "Classic", "Tragedy"],
+    "pages": 180
+  }'
+```
+
+Example response:
+
+```json
+{
+  "id": "65a123b789cdef0123456791",
+  "title": "The Great Gatsby",
+  "author": "F. Scott Fitzgerald",
+  "publishedYear": 1925,
+  "genres": [
+    "Fiction",
+    "Classic",
+    "Tragedy"
+  ],
+  "pages": 180
+}
+```
+
+### Update an Existing Book
+
+```bash
+curl -X PUT http://localhost:8080/api/v1/books/65a123b789cdef0123456791 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "publishedYear": 1925,
+    "genres": ["Fiction", "Classic", "Tragedy", "Literary Fiction"],
+    "pages": 180
+  }'
+```
+
+Example response:
+
+```json
+{
+  "id": "65a123b789cdef0123456791",
+  "title": "The Great Gatsby",
+  "author": "F. Scott Fitzgerald",
+  "publishedYear": 1925,
+  "genres": [
+    "Fiction",
+    "Classic",
+    "Tragedy",
+    "Literary Fiction"
+  ],
+  "pages": 180
+}
+```
+
+### Delete a Book
+
+```bash
+curl -X DELETE http://localhost:8080/api/v1/books/65a123b789cdef0123456791
+```
+
+This operation returns no content (HTTP 204) if successful.
+
 ## Running the Application
 
 1. Ensure you have Docker installed and running
