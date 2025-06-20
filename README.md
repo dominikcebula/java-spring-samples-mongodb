@@ -1,3 +1,5 @@
+[![CI Pipeline](https://github.com/dominikcebula/java-spring-samples-mongodb/actions/workflows/maven.yml/badge.svg)](https://github.com/dominikcebula/java-spring-samples-mongodb/actions/workflows/maven.yml)
+
 # Java and Spring Sample MongoDB Application
 
 ## Overview
