@@ -85,11 +85,11 @@ class ApplicationTest {
     void shouldCreateNewBook() {
         // given
         Book bookToCreated = new Book(
-                "Test Book - Create",
-                "Test Author",
-                2023,
-                Arrays.asList("Test", "Create"),
-                100
+                "The Lord of the Rings",
+                "J.R.R. Tolkien",
+                1954,
+                Arrays.asList("Fantasy", "Adventure"),
+                1178
         );
 
         // when
