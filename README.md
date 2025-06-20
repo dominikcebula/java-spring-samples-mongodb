@@ -11,6 +11,7 @@ a MongoDB database.
 - RESTful API for managing books
 - MongoDB based storage
 - MongoDB integration using Spring Data MongoDB
+- Docker Compose integration for automatic MongoDB startup
 - CRUD operations for books (Create, Read, Update, Delete)
 - Integration testing with Testcontainers
 
@@ -23,6 +24,9 @@ a MongoDB database.
 - Spring MVC
 - Spring Data MongoDB
 - MongoDB
+- Docker
+- Docker Compose
+- Spring Boot Docker Compose
 - Lombok
 - JUnit 5
 - Testcontainers
@@ -39,11 +43,12 @@ The application provides the following API endpoints:
 
 ## Running the Application
 
-1. Ensure you have MongoDB installed and running on localhost:27017
+1. Ensure you have Docker installed and running
 2. Clone this repository
 3. Navigate to the project directory
 4. Run `mvn spring-boot:run`
-5. The application will be available at http://localhost:8080
+5. The application will automatically start MongoDB using Docker Compose
+6. The application will be available at http://localhost:8080
 
 ## Testing
 
