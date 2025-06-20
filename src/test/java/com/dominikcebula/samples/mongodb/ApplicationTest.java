@@ -36,7 +36,7 @@ class ApplicationTest {
                 BOOKS_ENDPOINT,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<Book>>() {
+                new ParameterizedTypeReference<>() {
                 }
         );
 
@@ -101,6 +101,7 @@ class ApplicationTest {
 
         // then
         assertThat(createResponse.getStatusCode()).isEqualTo(CREATED);
+        assertThat(createResponse.getHeaders().getLocation()).isNotNull();
         Book createdBook = createResponse.getBody();
         assertThat(createdBook).isNotNull();
         assertThat(createdBook.getId()).isNotNull();

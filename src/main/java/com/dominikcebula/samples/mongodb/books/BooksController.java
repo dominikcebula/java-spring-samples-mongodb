@@ -6,13 +6,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/books")
+@RequestMapping(BooksController.API_V_1_BOOKS)
 @RequiredArgsConstructor
 public class BooksController {
+    static final String API_V_1_BOOKS = "/api/v1/books";
+
     private final BookRepository bookRepository;
 
     @GetMapping
@@ -39,6 +42,7 @@ public class BooksController {
         Book savedBook = bookRepository.save(book);
 
         return ResponseEntity.status(HttpStatus.CREATED)
+                .location(URI.create(API_V_1_BOOKS + "/" + savedBook.getId()))
                 .body(savedBook);
     }
 
