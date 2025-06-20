@@ -21,4 +21,12 @@ public class Book {
     private int publishedYear;
     private List<String> genres;
     private int pages;
+
+    public Book(String title, String author, int publishedYear, List<String> genres, int pages) {
+        this.title = title;
+        this.author = author;
+        this.publishedYear = publishedYear;
+        this.genres = genres;
+        this.pages = pages;
+    }
 }
